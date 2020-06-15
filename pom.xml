@@ -6,6 +6,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>kafka</module>
+        <module>custom-file</module>
+        <module>custom-file-app</module>
     </modules>
 
     <parent>
@@ -33,6 +35,12 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>custom-file</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -5,8 +5,9 @@
 .idea/modules.xml
 .idea/*.iml
 .idea/*.xml
+.idea/libraries/*.xml
 *.iml
-.idea/**
+
 # Except the following (these override the above exclusions)
 !.idea/runConfigurations
 
