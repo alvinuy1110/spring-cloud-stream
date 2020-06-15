@@ -1,0 +1,24 @@
+
+server:
+  port: 10080
+
+
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          # connect to kafka
+          brokers: localhost:9092
+      bindings:
+        greetings-in:
+          destination: greetings
+          contentType: application/json
+        greetings-out:
+          destination: greetings
+          contentType: application/json
+
+
+logging:
+  level:
+    org.apache.kafka: INFO
