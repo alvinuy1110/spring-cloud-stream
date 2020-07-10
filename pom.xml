@@ -7,7 +7,9 @@
     <modules>
         <module>kafka</module>
         <module>custom-file</module>
-        <module>custom-file-app</module>
+        <module>custom-artemis</module>
+        <module>artemis-broker</module>
+        <module>custom-artemis-app</module>
     </modules>
 
     <parent>
@@ -42,6 +44,13 @@
                 <artifactId>custom-file</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>custom-artemis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <!--    <dependencyManagement>-->

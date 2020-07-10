@@ -39,7 +39,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- this is for the kafk broker support -->
+        <!-- this is for the kafk com.myproject.broker support -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.kafka</groupId>-->
 <!--            <artifactId>spring-kafka</artifactId>-->

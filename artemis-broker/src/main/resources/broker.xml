@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+    <core xmlns="urn:activemq:core">
+        <!-- disabling for in-memory tests only -->
+        <persistence-enabled>false</persistence-enabled>
+
+
+        <!-- persistence stores -->
+        <bindings-directory>./data/bindings</bindings-directory>
+
+        <journal-directory>./data/journal</journal-directory>
+
+        <large-messages-directory>./data/largemessages</large-messages-directory>
+
+        <paging-directory>./data/paging</paging-directory>
+
+<!--        <cluster-user>admin</cluster-user>-->
+<!--        <cluster-password>admin</cluster-password>-->
+        <!-- Connectors -->
+
+<!--        <connectors>-->
+<!--            &lt;!&ndash; This connector corresponds to the New York server &ndash;&gt;-->
+<!--            <connector name="newyork-connector">tcp://localhost:61617</connector>-->
+<!--        </connectors>-->
+
+        <!-- Acceptors -->
+
+        <acceptors>
+            <acceptor name="tcp">tcp://localhost:61616</acceptor>
+            <acceptor name="in-vm">vm://0</acceptor>
+        </acceptors>
+        <!-- Divert configuration -->
+
+        <!-- We need to create a core queue for the JMS queue explicitly because the bridge will be deployed
+        before the JMS queue is deployed, so the first time, it otherwise won't find the queue -->
+
+
+        <!-- Other config -->
+
+        <security-settings>
+            <!-- see https://activemq.apache.org/components/artemis/documentation/latest/security.html -->
+            <!--security for example -->
+            <security-setting match="#">
+                <permission roles="guest" type="createAddress"/>
+                <permission roles="guest" type="deleteAddress"/>
+                <permission roles="guest" type="createDurableQueue"/>
+                <permission roles="guest" type="deleteDurableQueue"/>
+                <permission roles="guest" type="createNonDurableQueue"/>
+                <permission roles="guest" type="deleteNonDurableQueue"/>
+                <permission roles="guest" type="consume"/>
+                <permission roles="guest" type="send"/>
+                <permission roles="guest" type="browse"/>
+                <permission roles="guest" type="manage"/>
+            </security-setting>
+        </security-settings>
+
+
+        <address-settings>
+            <!-- if you define auto-create on certain queues, management has to be auto-create -->
+            <address-setting match="activemq.management#">
+                <dead-letter-address>DLQ</dead-letter-address>
+                <expiry-address>ExpiryQueue</expiry-address>
+                <redelivery-delay>0</redelivery-delay>
+                <!-- with -1 only the global-max-size is in use for limiting -->
+                <max-size-bytes>-1</max-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-create-queues>true</auto-create-queues>
+                <auto-create-addresses>true</auto-create-addresses>
+                <auto-create-jms-queues>true</auto-create-jms-queues>
+                <auto-create-jms-topics>true</auto-create-jms-topics>
+            </address-setting>
+            <!-- main sandbox config -->
+            <address-setting match="test.#">
+                <!-- default is 1.0 -->
+                <redelivery-delay-multiplier>1.5</redelivery-delay-multiplier>
+                <!-- default is 0 (no delay) -->
+                <redelivery-delay>2000</redelivery-delay>
+                <!-- default is 0.0); to randomize the redelivery -->
+                <redelivery-collision-avoidance-factor>0.15</redelivery-collision-avoidance-factor>
+                <!-- default is redelivery-delay * 10 -->
+                <max-redelivery-delay>10000</max-redelivery-delay>
+
+                <!-- default is 10 -->
+                <max-delivery-attempts>3</max-delivery-attempts>
+
+                <dead-letter-address>DeadLetterAddr</dead-letter-address>
+                <auto-create-dead-letter-resources>true</auto-create-dead-letter-resources>
+                <dead-letter-queue-prefix></dead-letter-queue-prefix>
+                <dead-letter-queue-suffix>.DLQ</dead-letter-queue-suffix>
+
+                <!--                <dead-letter-address>DLQ</dead-letter-address>-->
+<!--                <expiry-address>ExpiryQueueTest</expiry-address>-->
+                <!-- in milliseconds -->
+                <!-- with -1 only the global-max-size is in use for limiting -->
+                <max-size-bytes>-1</max-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-create-queues>true</auto-create-queues>
+                <auto-create-addresses>true</auto-create-addresses>
+                <auto-create-jms-queues>true</auto-create-jms-queues>
+                <auto-create-jms-topics>true</auto-create-jms-topics>
+            </address-setting>
+
+            <address-setting match="deliveryExample-Dynamic.#">
+                <!-- default is 1.0 -->
+                <redelivery-delay-multiplier>1.5</redelivery-delay-multiplier>
+                <!-- default is 0 (no delay) -->
+                <redelivery-delay>2000</redelivery-delay>
+                <!-- default is 0.0); to randomize the redelivery -->
+                <redelivery-collision-avoidance-factor>0.15</redelivery-collision-avoidance-factor>
+                <!-- default is redelivery-delay * 10 -->
+                <max-redelivery-delay>10000</max-redelivery-delay>
+
+                <!-- default is 10 -->
+                <max-delivery-attempts>3</max-delivery-attempts>
+
+                <dead-letter-address>DeadLetterAddr</dead-letter-address>
+                <auto-create-dead-letter-resources>true</auto-create-dead-letter-resources>
+                <dead-letter-queue-prefix></dead-letter-queue-prefix>
+                <dead-letter-queue-suffix>.DLQ</dead-letter-queue-suffix>
+
+                <!--                <dead-letter-address>DLQ</dead-letter-address>-->
+                <!--                <expiry-address>ExpiryQueueTest</expiry-address>-->
+                <!-- in milliseconds -->
+                <!-- with -1 only the global-max-size is in use for limiting -->
+                <max-size-bytes>-1</max-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-create-queues>true</auto-create-queues>
+                <auto-create-addresses>true</auto-create-addresses>
+                <auto-create-jms-queues>true</auto-create-jms-queues>
+                <auto-create-jms-topics>true</auto-create-jms-topics>
+            </address-setting>
+
+            <address-setting match="expiryExample-Dynamic.#">
+                <!-- expiry config -->
+                <!-- dynamic expiry address; available in artemis v2.12.x+ -->
+
+                <!--                <auto-delete-queues>false</auto-delete-queues>-->
+                <!--                <auto-delete-addresses>false</auto-delete-addresses>-->
+
+                <dead-letter-address>DLQ</dead-letter-address>
+                <auto-create-dead-letter-resources>true</auto-create-dead-letter-resources>
+                <dead-letter-queue-prefix></dead-letter-queue-prefix>
+                <dead-letter-queue-suffix>.DLQ</dead-letter-queue-suffix>
+                <expiry-address>ExpiryQueue</expiry-address>
+                <!-- default false-->
+                <auto-create-expiry-resources>true</auto-create-expiry-resources>
+                <!-- default EXP. -->
+                <expiry-queue-prefix></expiry-queue-prefix>
+                <!-- default '' -->
+                <expiry-queue-suffix>.EXP</expiry-queue-suffix>
+                <!-- end of expiry config -->
+
+                <!--                <dead-letter-address>DLQ</dead-letter-address>-->
+                <!--                <expiry-address>ExpiryQueueTest</expiry-address>-->
+                <!-- in milliseconds -->
+                <expiry-delay>2000</expiry-delay>
+                <redelivery-delay>0</redelivery-delay>
+                <!-- with -1 only the global-max-size is in use for limiting -->
+                <max-size-bytes>-1</max-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-create-queues>true</auto-create-queues>
+                <auto-create-addresses>true</auto-create-addresses>
+                <auto-create-jms-queues>true</auto-create-jms-queues>
+                <auto-create-jms-topics>true</auto-create-jms-topics>
+            </address-setting>
+
+            <address-setting match="expiryExample-Static.#">
+
+                <dead-letter-address>DLQ</dead-letter-address>
+                <expiry-address>ExpiryQueueTest</expiry-address>
+                <!-- in milliseconds -->
+                <expiry-delay>2000</expiry-delay>
+                <redelivery-delay>0</redelivery-delay>
+                <!-- with -1 only the global-max-size is in use for limiting -->
+                <max-size-bytes>-1</max-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <address-full-policy>PAGE</address-full-policy>
+                <auto-create-queues>true</auto-create-queues>
+                <auto-create-addresses>true</auto-create-addresses>
+                <auto-create-jms-queues>true</auto-create-jms-queues>
+                <auto-create-jms-topics>true</auto-create-jms-topics>
+            </address-setting>
+
+            <!--default for catch all-->
+<!--            <address-setting match="#">-->
+<!--                <dead-letter-address>DLQ</dead-letter-address>-->
+<!--                <expiry-address>ExpiryQueue</expiry-address>-->
+<!--                <redelivery-delay>0</redelivery-delay>-->
+<!--                &lt;!&ndash; with -1 only the global-max-size is in use for limiting &ndash;&gt;-->
+<!--                <max-size-bytes>-1</max-size-bytes>-->
+<!--                <message-counter-history-day-limit>10</message-counter-history-day-limit>-->
+<!--                <address-full-policy>PAGE</address-full-policy>-->
+<!--                <auto-create-queues>true</auto-create-queues>-->
+<!--                <auto-create-addresses>true</auto-create-addresses>-->
+<!--                <auto-create-jms-queues>true</auto-create-jms-queues>-->
+<!--                <auto-create-jms-topics>true</auto-create-jms-topics>-->
+<!--            </address-setting>-->
+
+        </address-settings>
+
+        <addresses>
+            <address name="DLQ">
+                <anycast>
+                    <queue name="DLQ" />
+                </anycast>
+            </address>
+            <address name="ExpiryQueue">
+                <anycast>
+                    <queue name="ExpiryQueue" />
+                </anycast>
+            </address>
+            <address name="ExpiryQueueTest">
+                <anycast>
+                    <queue name="ExpiryQueueTest" />
+                </anycast>
+            </address>
+
+            <address name="test.Queue">
+                <anycast>
+                    <queue name="test.Queue"/>
+                </anycast>
+            </address>
+
+            <address name="test.Queue2">
+                <anycast>
+                    <queue name="test.Queue2"/>
+                </anycast>
+            </address>
+
+        </addresses>
+    </core>
+</configuration>

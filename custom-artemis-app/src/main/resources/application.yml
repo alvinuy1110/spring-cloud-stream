@@ -1,0 +1,81 @@
+
+server:
+  port: 10080
+
+
+spring:
+  application:
+    ## drives the channel naming
+    name: custom-artemis
+  artemis:
+
+    ## embedded
+#    mode: embedded
+#    embedded:
+#      enabled: true
+#      queues: testQueue
+
+    ## external broker
+    mode: native
+    embedded:
+      enabled: false
+#      queues: testQueue
+
+    host: localhost
+    port: 61616
+    user: guest
+    password: guest
+
+  cloud:
+    stream:
+#      kafka:
+#        binder:
+#          # connect to kafka
+#          brokers: localhost:9092
+#      bindings:
+#        greetings-in:
+#          destination: greetings
+#          contentType: application/json
+#        greetings-out:
+#          destination: greetings
+#          contentType: application/json
+
+
+   ## JMS settings
+      jms:
+        default:
+
+
+        ## name assigned to StreamListener or @Input
+        ## this is the destination name!!!, can be changed by putting in properties
+        greetings-in:
+          # as per binder, where the input file is
+          #destination: input1
+          #          group: dpp-local
+
+          # must match a binder alias
+          binder: jms
+
+        ## name assigned to SendTo or @Output
+        ## this is the destination name!!!, can be changed by putting in properties
+        greetings-out:
+          ## see JmsConsumerProperties
+          # as per binder, where the target output file
+          #destination: output1
+          dlqName: example
+
+          # must match a binder alias
+          binder: jms
+
+    binders:
+      # this is just an alias assigned
+      jms:
+        # this value must match the name set in spring.binders
+        type: jms
+
+
+logging:
+  level:
+    org.apache.kafka: INFO
+    org.springframework.integration: TRACE
+    org.springframework: TRACE

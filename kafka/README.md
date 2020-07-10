@@ -7,7 +7,7 @@ https://spring.io/projects/spring-kafka
 
 |Profiles|Description|
 |--------|-----------|
-|embedded|activate the embedded kafka broker|
+|embedded|activate the embedded kafka com.myproject.broker|
 
 ## Embedded Broker
 

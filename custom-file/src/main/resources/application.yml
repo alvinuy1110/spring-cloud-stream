@@ -4,6 +4,7 @@ spring:
     stream:
       bindings:
 
+        ## name assigned to StreamListener or @Input
         input:
           # as per binder, where the input file is
           destination: input/input.txt
@@ -11,6 +12,8 @@ spring:
 
           # must match a binder alias
           binder: file
+
+        ## name assigned to SendTo or @Output
         output:
           # as per binder, where the target output file
           destination: target/output.txt
